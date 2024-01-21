@@ -1,6 +1,6 @@
 # Bot Template
 
-Welcome to the Bot Template, a project built with Django and Aiogram, designed to be incredibly user-friendly.
+Welcome to the Bot Template, a project built with Django and Aiogram by **Nodirbek Abduraimov**, designed to be incredibly user-friendly.
 
 ## Getting Started
 
