@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  bot:
+    build: .
+    container_name: bot
+    command: python3 app.py
+    env_file: ./.env
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+
+  admin:
+    command: python3 manage.py runserver 0.0.0.0:8000
+    container_name: admin
+    build: .
+    ports:
+      - "80:8000"
+    volumes:
+      - ./db.sqlite3:/app/db.sqlite3
+
+volumes:
+  db_data:
+    driver: local
