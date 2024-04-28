@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Ratings</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Product Ratings</h1>
+        {% for product_with_ratings in products_with_ratings %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h2>{{ product_with_ratings.parent_product.name }}</h2>
+                    <p><strong>Parent Product Rating:</strong> {{ product_with_ratings.parent_rating }}</p>
+                </div>
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Child Product</th>
+                                <th>Child Product Rating</th>
+                                <th>Reviews</th>
+                                <th>Users</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for child_rating in product_with_ratings.child_products_with_ratings %}
+                                <tr>
+                                    <td>{{ child_rating.child_product.name }}</td>
+                                    <td>{{ child_rating.child_rating }}</td>
+                                    <td>
+                                        {% for review in child_rating.child_reviews %}
+                                            {{ review.rating }}
+                                            {% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {% for review in child_rating.child_reviews %}
+                                            {{ review.user.name }}
+                                            {% if not forloop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
