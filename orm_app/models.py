@@ -83,7 +83,15 @@ class Sale(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.product.name
+        return (
+            self.product.name
+            + " - "
+            + self.container.number
+            + " - "
+            + str(self.purchase_date)
+            + " - "
+            + self.user.name
+        )
 
 
 class Review(models.Model):
@@ -100,22 +108,23 @@ class Review(models.Model):
         "Product", on_delete=models.SET_NULL, null=True, blank=True
     )
     rating = models.CharField(max_length=100, choices=RATING_CHOICES)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    is_active = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.rating
-
-
-class SaleReview(models.Model):
     sale = models.ForeignKey("Sale", on_delete=models.SET_NULL, null=True, blank=True)
-    review = models.ForeignKey(
-        "Review", on_delete=models.SET_NULL, null=True, blank=True
-    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.sale.product.name + " " + self.review.rating
+        return self.rating + " - " + self.product.name + " - " + self.user.name
+
+
+# class SaleReview(models.Model):
+#     sale = models.ForeignKey("Sale", on_delete=models.SET_NULL, null=True, blank=True)
+#     review = models.ForeignKey(
+#         "Review", on_delete=models.SET_NULL, null=True, blank=True
+#     )
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+#     is_active = models.BooleanField(default=True)
+
+#     def __str__(self):
+#         return self.sale.product.name + " " + self.review.rating
