@@ -1,5 +1,7 @@
 from django.shortcuts import render
+
 from .models import Product, Review
+
 
 def product_ratings_view(request):
     # Get all parent products (products with no parent)
@@ -7,7 +9,7 @@ def product_ratings_view(request):
 
     products_with_ratings = []
     for parent in parent_products:
-         # Get all child products of the current parent
+        # Get all child products of the current parent
         child_products = list(parent.product_set.all())
         parent_product = parent
         child_products.append(parent_product)
@@ -20,30 +22,34 @@ def product_ratings_view(request):
         for child in child_products:
             child_reviews = Review.objects.filter(product=child)
             child_rating = calculate_average_rating(child_reviews)
-            child_products_with_ratings.append({
-                'child_product': child,
-                'child_rating': child_rating,
-                'child_reviews': child_reviews,
-            })
+            child_products_with_ratings.append(
+                {
+                    "child_product": child,
+                    "child_rating": child_rating,
+                    "child_reviews": child_reviews,
+                }
+            )
 
         # Append data to the main list
-        products_with_ratings.append({
-            'parent_product': parent,
-            'parent_rating': parent_rating,
-            'child_products_with_ratings': child_products_with_ratings
-        })
+        products_with_ratings.append(
+            {
+                "parent_product": parent,
+                "parent_rating": parent_rating,
+                "child_products_with_ratings": child_products_with_ratings,
+            }
+        )
 
-    context = {
-        'products_with_ratings': products_with_ratings
-    }
+    context = {"products_with_ratings": products_with_ratings}
 
-    return render(request, 'layout/index.html', context)
+    return render(request, "layout/index.html", context)
+
 
 def calculate_average_rating(reviews):
     if reviews.exists():
         total_ratings = sum(get_numeric_rating(review.rating) for review in reviews)
         return round(total_ratings / len(reviews), 2)  # Round to 2 decimal places
     return 0
+
 
 def get_numeric_rating(rating_str):
     if rating_str == Review.EXCELLENT:
