@@ -1,60 +1,187 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Ratings</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-    <div class="container">
-        <h1>Product Ratings</h1>
-        {% for product_with_ratings in products_with_ratings %}
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h2>{{ product_with_ratings.parent_product.name }}</h2>
-                    <p><strong>Parent Product Rating:</strong> {{ product_with_ratings.parent_rating }}</p>
-                </div>
-                <div class="card-body">
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Child Product</th>
-                                <th>Child Product Rating</th>
-                                <th>Reviews</th>
-                                <th>Users</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for child_rating in product_with_ratings.child_products_with_ratings %}
-                                <tr>
-                                    <td>{{ child_rating.child_product.name }}</td>
-                                    <td>{{ child_rating.child_rating }}</td>
-                                    <td>
-                                        {% for review in child_rating.child_reviews %}
-                                            {{ review.rating }}
-                                            {% if not forloop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        {% for review in child_rating.child_reviews %}
-                                            {{ review.user.name }}
-                                            {% if not forloop.last %}, {% endif %}
-                                        {% endfor %}
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Container List</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+        margin: 0;
+        padding: 20px;
+      }
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+      h1 {
+        text-align: center;
+        color: #333;
+        margin-bottom: 30px;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      th,
+      td {
+        padding: 15px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+      }
+
+      th {
+        background-color: #f2f2f2;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      tr:hover {
+        background-color: #f9f9f9;
+      }
+
+      .container-details {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+      }
+
+      .container-number {
+        font-weight: bold;
+        margin-right: 10px;
+        color: #007bff;
+        text-decoration: none;
+      }
+
+      .container-number:hover {
+        text-decoration: underline;
+      }
+
+      .arrival-date {
+        color: #777;
+        font-size: 0.9em;
+      }
+
+      .small-text {
+        font-size: 0.9em;
+        color: #777;
+      }
+
+      .icon {
+        font-size: 1.2em;
+        margin-right: 5px;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes zoomIn {
+        from {
+          transform: scale(0);
+        }
+        to {
+          transform: scale(1);
+        }
+      }
+
+      @media screen and (max-width: 600px) {
+        table {
+          overflow-x: auto;
+          display: block;
+        }
+
+        th,
+        td {
+          white-space: nowrap;
+          min-width: 150px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Container List</h1>
+    <table id="container-table">
+      <thead>
+        <tr>
+          <th>Number</th>
+          <th>Arrival Date</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for container in containers %}
+        <tr
+          style="animation: fadeIn 0.5s ease forwards; animation-delay: {{ forloop.counter }}s;"
+        >
+          <td>
+            <div
+              class="container-details"
+              data-container-id="{{ container.id }}"
+            >
+              <i class="fas fa-truck icon"></i>
+              <span class="container-number">{{ container.number }}</span>
+            </div>
+          </td>
+          <td>
+            <i class="fas fa-calendar-alt icon"></i>
+            {{ container.arrival_date }}
+            <td>
+                <div>
+                    <span class="small-text"><i class="fas fa-clock icon"></i> Created At: {{ container.created_at|date:"DATETIME_FORMAT" }}</span><br>
+                    <span class="small-text"><i class="fas fa-history icon"></i> Updated At: {{ container.updated_at|date:"DATETIME_FORMAT" }}</span>
+                </div>
+            </td>
+            
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <!-- Pagination Links -->
+    <div class="pagination">
+      <span class="step-links">
+        {% if containers.has_previous %}
+        <a href="?page=1">&laquo; First</a>
+        <a href="?page={{ containers.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+          Page {{ containers.number }} of {{ containers.paginator.num_pages }}.
+        </span>
+
+        {% if containers.has_next %}
+        <a href="?page={{ containers.next_page_number }}">Next</a>
+        <a href="?page={{ containers.paginator.num_pages }}">Last &raquo;</a>
+        {% endif %}
+      </span>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const containerDetails =
+          document.querySelectorAll(".container-details");
+        containerDetails.forEach((container) => {
+          container.addEventListener("click", function () {
+            const containerId = this.dataset.containerId;
+            window.location.href = `/container/${containerId}/`;
+          });
+        });
+      });
+    </script>
+  </body>
 </html>

@@ -1,6 +1,8 @@
 from django.urls import path
-from .views import product_ratings_view
+from . import views
 
 urlpatterns = [
-    path('data/', product_ratings_view, name='data_display'),
+    path('', views.index, name='containers_list'),
+    path('container/<int:container_id>/', views.container_detail, name='container_detail'),
+    # path('reviewer_detail/<str:reviewer_name>/', views.reviewer_detail, name='reviewer_detail'),
 ]
