@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ container.number }} Details</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,10 +103,10 @@
         <h1>{{ container.number }} Container</h1>
         <div class="product">
             {% for product, stats in review_statistics.items %}
-                <div class="product-name">{{ product }}</div>
+                <div class="product-name"><i class="fas fa-box-open"></i> {{ product }}</div>
                 <div class="review-stats">
                     <div class="review-stat">
-                        <h3>Review Statistics</h3>
+                        <h3><i class="fas fa-chart-line"></i> Review Statistics</h3>
                         <ul>
                             {% for rating, count in stats.reviews.items %}
                                 <li class="rating-{{ rating|lower }}">{{ rating }}: {{ count }}</li>
@@ -113,7 +114,7 @@
                         </ul>
                     </div>
                     <div class="review-stat">
-                        <h3>Reviewers</h3>
+                        <h3><i class="fas fa-users"></i> Baho beruvchilar</h3>
                         <ul class="reviewer-list">
                             {% for reviewer, ratings in stats.reviewers.items %}
                                 <li class="reviewer-name">
@@ -130,6 +131,7 @@
                         </ul>
                     </div>
                 </div>
+                <hr color="#ddd">
             {% endfor %}
         </div>
     </div>
