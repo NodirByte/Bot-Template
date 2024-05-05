@@ -1,4 +1,8 @@
-from keyboards.inline.users_inlines import get_products_kb_in, get_child_product_kb_in, get_sp_child_product_kb_in
+from keyboards.inline.users_inlines import (
+    get_products_kb_in,
+    get_child_product_kb_in,
+    get_sp_child_product_kb_in,
+)
 from loader import dp, bot
 from aiogram import types
 
@@ -7,13 +11,13 @@ from utils.db_api.connector_db import (
     get_child_product_by_id,
     get_products_child,
     get_products_parent,
+    get_sale_by_cp_ids,
     get_user_by_telegram_id,
-    get_user_organization,
     rate_product,
-    get_sale_by_product_id,
+    get_sale_by_cp_ids,
     update_review_count,
 )
-from aiogram.types import Message, ContentType, CallbackQuery
+from aiogram.types import CallbackQuery
 from aiogram.dispatcher import FSMContext
 
 
@@ -50,14 +54,16 @@ async def categories(message: types.Message):
 @dp.callback_query_handler(lambda query: query.data.startswith("product"), state=None)
 async def product(query: CallbackQuery, state: FSMContext):
     try:
-        _, product_id, telegram_id, spatial= query.data.split(":")
+        _, product_id, telegram_id, container_id = query.data.split(":")
         print("\nData: ", query.data)
         child_products = await get_products_child(product_id)
+        print("\nChild Products: ", child_products)
         for child_product in child_products:
-            if spatial == "review":
+            if container_id != "None":
                 child_product_kb_in = await get_sp_child_product_kb_in(
-                    child_product.id, telegram_id
+                    child_product.id, telegram_id, container_id
                 )
+                print("\nInlined Keyboard: ", child_product_kb_in)
             else:
                 child_product_kb_in = await get_child_product_kb_in(
                     child_product.id, telegram_id
@@ -70,7 +76,7 @@ async def product(query: CallbackQuery, state: FSMContext):
                 )
     except Exception as e:
 
-        print("Error in types: ", e)
+        print("Error in types of Product: ", e)
         await query.answer("Error")
 
 
@@ -102,13 +108,13 @@ async def rate_of_product(query: CallbackQuery, state: FSMContext):
 
     except Exception as e:
         print(e)
-        await query.answer("Error") 
+        await query.answer("Error")
 
 
 @dp.callback_query_handler(lambda query: query.data.startswith("review"), state=None)
 async def rate_of_product(query: CallbackQuery, state: FSMContext):
     try:
-        _, child_product_id, rating, telegram_id = query.data.split(":")
+        _, child_product_id, rating, telegram_id, container_id = query.data.split(":")
         await query.answer(f"Siz {rating}ga baholadingiz!")
         # remove inline keyboard from message
         await bot.edit_message_reply_markup(
@@ -125,7 +131,7 @@ async def rate_of_product(query: CallbackQuery, state: FSMContext):
             rating = BAD
         try:
             child_product = await get_child_product_by_id(child_product_id)
-            sale = await get_sale_by_product_id(child_product_id)
+            sale = await get_sale_by_cp_ids(child_product_id, container_id)
             user = await get_user_by_telegram_id(telegram_id)
             await rate_product(user, child_product, rating, sale)
             await update_review_count(sale)
@@ -135,4 +141,4 @@ async def rate_of_product(query: CallbackQuery, state: FSMContext):
 
     except Exception as e:
         print(e)
-        await query.answer("Error") 
+        await query.answer("Error")

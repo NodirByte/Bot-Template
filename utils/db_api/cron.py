@@ -8,16 +8,13 @@ DAILY_CRON_INTERVAL = 5  # 1 second for testing purposes
 
 
 async def ask_review_for_product():
-    print("Cron started")
     while True:
-        print("Cron iteration")
         await asyncio.sleep(DAILY_CRON_INTERVAL)
-        sales = await get_sales()
-        print(sales)
+        sales = await get_sales()      
         for sale in sales:
-            product, user = sale.product, sale.user
+            product, user, container= sale.product, sale.user, sale.container
             products_kb_in = await get_products_kb_in(
-                product.id, user.telegram_id, spatial="review"
+                product.id, user.telegram_id, container.id
             )
             file_path = product.image.path
             caption = f"{product.name}\n{product.number}"
