@@ -84,13 +84,7 @@ class Sale(models.Model):
 
     def __str__(self):
         return (
-            self.product.name
-            + " - "
-            + self.container.number
-            + " - "
-            + str(self.purchase_date)
-            + " - "
-            + self.user.name
+            self.product.name + " - " + str(self.purchase_date) + " - " + self.user.name
         )
 
 

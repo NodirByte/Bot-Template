@@ -52,9 +52,11 @@ def get_user_by_telegram_id(telegram_id):
 def get_child_product_by_id(child_product_id):
     return models.Product.objects.get(id=child_product_id)
 
+
 @sync_to_async
 def get_sale_by_product_id(product_id):
     return models.Sale.objects.get(product_id=product_id)
+
 
 @sync_to_async
 def update_review_count(sale):

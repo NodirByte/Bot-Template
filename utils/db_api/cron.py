@@ -4,16 +4,21 @@ from keyboards.inline.users_inlines import get_products_kb_in
 from loader import bot
 from utils.db_api.connector_db import get_sales
 
-DAILY_CRON_INTERVAL = 123  # 1 second for testing purposes
+DAILY_CRON_INTERVAL = 5  # 1 second for testing purposes
 
 
 async def ask_review_for_product():
+    print("Cron started")
     while True:
+        print("Cron iteration")
         await asyncio.sleep(DAILY_CRON_INTERVAL)
         sales = await get_sales()
+        print(sales)
         for sale in sales:
             product, user = sale.product, sale.user
-            products_kb_in = await get_products_kb_in(product.id, user.telegram_id, spatial="review")
+            products_kb_in = await get_products_kb_in(
+                product.id, user.telegram_id, spatial="review"
+            )
             file_path = product.image.path
             caption = f"{product.name}\n{product.number}"
             try:
