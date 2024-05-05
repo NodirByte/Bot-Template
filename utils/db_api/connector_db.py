@@ -35,11 +35,6 @@ def rate_product(
     review, _ = models.Review.objects.update_or_create(
         user=user, product=product, rating=rate, sale=sale
     )
-    # try:
-    #     review = models.Review.objects.get(user=user, product=product)
-    #     review.rating = rate
-    # except models.Review.DoesNotExist:
-    #     review = models.Review.objects.create(user=user, product=product, rating=rate)
     return review
 
 
@@ -56,6 +51,15 @@ def get_user_by_telegram_id(telegram_id):
 @sync_to_async
 def get_child_product_by_id(child_product_id):
     return models.Product.objects.get(id=child_product_id)
+
+@sync_to_async
+def get_sale_by_product_id(product_id):
+    return models.Sale.objects.get(product_id=product_id)
+
+@sync_to_async
+def update_review_count(sale):
+    sale.review_count += 1
+    sale.save()
 
 
 @sync_to_async

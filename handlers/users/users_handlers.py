@@ -1,4 +1,4 @@
-from keyboards.inline.users_inlines import get_products_kb_in, get_child_product_kb_in
+from keyboards.inline.users_inlines import get_products_kb_in, get_child_product_kb_in, get_sp_child_product_kb_in
 from loader import dp, bot
 from aiogram import types
 
@@ -10,6 +10,8 @@ from utils.db_api.connector_db import (
     get_user_by_telegram_id,
     get_user_organization,
     rate_product,
+    get_sale_by_product_id,
+    update_review_count,
 )
 from aiogram.types import Message, ContentType, CallbackQuery
 from aiogram.dispatcher import FSMContext
@@ -48,12 +50,18 @@ async def categories(message: types.Message):
 @dp.callback_query_handler(lambda query: query.data.startswith("product"), state=None)
 async def product(query: CallbackQuery, state: FSMContext):
     try:
-        _, product_id, telegram_id = query.data.split(":")
+        _, product_id, telegram_id, spatial= query.data.split(":")
+        print("\nData: ", query.data)
         child_products = await get_products_child(product_id)
         for child_product in child_products:
-            child_product_kb_in = await get_child_product_kb_in(
-                child_product.id, telegram_id
-            )
+            if spatial == "review":
+                child_product_kb_in = await get_sp_child_product_kb_in(
+                    child_product.id, telegram_id
+                )
+            else:
+                child_product_kb_in = await get_child_product_kb_in(
+                    child_product.id, telegram_id
+                )
             file_path = child_product.image.path
             caption = f"{child_product.name}\n{child_product.number}"
             with open(file_path, "rb") as file:
@@ -88,6 +96,39 @@ async def rate_of_product(query: CallbackQuery, state: FSMContext):
             child_product = await get_child_product_by_id(child_product_id)
             user = await get_user_by_telegram_id(telegram_id)
             await rate_product(user, child_product, rating)
+        except Exception as e:
+            print(e)
+            await query.answer("Error")
+
+    except Exception as e:
+        print(e)
+        await query.answer("Error") 
+
+
+@dp.callback_query_handler(lambda query: query.data.startswith("review"), state=None)
+async def rate_of_product(query: CallbackQuery, state: FSMContext):
+    try:
+        _, child_product_id, rating, telegram_id = query.data.split(":")
+        await query.answer(f"Siz {rating}ga baholadingiz!")
+        # remove inline keyboard from message
+        await bot.edit_message_reply_markup(
+            chat_id=telegram_id, message_id=query.message.message_id
+        )
+        EXCELLENT = "EXCELLENT"
+        MEDIUM = "MEDIUM"
+        BAD = "BAD"
+        if rating == "A'lo":
+            rating = EXCELLENT
+        elif rating == "Yaxshi":
+            rating = MEDIUM
+        elif rating == "Qoniqarsiz":
+            rating = BAD
+        try:
+            child_product = await get_child_product_by_id(child_product_id)
+            sale = await get_sale_by_product_id(child_product_id)
+            user = await get_user_by_telegram_id(telegram_id)
+            await rate_product(user, child_product, rating, sale)
+            await update_review_count(sale)
         except Exception as e:
             print(e)
             await query.answer("Error")

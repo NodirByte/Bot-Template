@@ -1,11 +1,9 @@
-import asyncio
-
 from aiogram import executor
-
 from loader import dp
-from utils.cron import ask_review_for_product
 from utils.notify_admins import on_startup_notify
 from utils.set_bot_commands import set_default_commands
+import asyncio
+from utils.db_api.cron import ask_review_for_product
 
 
 async def on_startup(dispatcher):
