@@ -81,16 +81,16 @@ def get_product_by_user(user, container) -> list[models.Product]:
 
 
 @sync_to_async
-def get_sale_by_user_product(user, product, container):
-    due_date = timezone.now() - timezone.timedelta(days=settings.REVIEW_DAYS)
-    return models.Sale.objects(
-        user=user,
-        product=product,
-        review_count__lt=settings.REVIEW_LIMIT,
-        purchase_date__lte=due_date,
-        container=container,
+def get_sales():
+    # due_date = timezone.now() - timezone.timedelta(days=settings.REVIEW_DAYS)
+    return list(
+        models.Sale.objects.filter(
+            review_count__lt=settings.REVIEW_LIMIT,
+            # purchase_date__lte=due_date,
+        ).select_related("product", "user")
     )
-    
+
+
 @sync_to_async
 def get_all_containers():
     return list(models.Container.objects.all())
