@@ -4,7 +4,7 @@ from keyboards.inline.users_inlines import get_products_kb_in
 from loader import bot
 from utils.db_api.connector_db import get_sales
 
-DAILY_CRON_INTERVAL = 5  # 1 second for testing purposes
+DAILY_CRON_INTERVAL = 60 * 60 * 24 # 24 hours
 
 
 async def ask_review_for_product():
