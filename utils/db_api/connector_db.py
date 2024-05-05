@@ -62,6 +62,10 @@ def get_sale_by_product_id(product_id):
 def update_review_count(sale):
     sale.review_count += 1
     sale.save()
+    
+@sync_to_async
+def check_review_count(sale):
+    return sale.review_count >= settings.REVIEW_LIMIT
 
 
 @sync_to_async

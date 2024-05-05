@@ -1,40 +1,51 @@
 # import inline keyboard
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-from utils.db_api.connector_db import get_child_product_by_id, get_user_by_telegram_id, user_has_reviewed_product
-# from utils.db_api.connector_db import 
+from utils.db_api.connector_db import (
+    get_child_product_by_id,
+    get_user_by_telegram_id,
+    user_has_reviewed_product,
+    check_review_count,
+    get_sale_by_product_id
+)
+
+# from utils.db_api.connector_db import
+
 
 async def get_products_kb_in(product_id, telegram_id, spatial="None"):
     inline_keyboard = InlineKeyboardMarkup()
     inline_keyboard.add(
         InlineKeyboardButton(
             text="Barcha turlari",
-            callback_data=f"product:{product_id}:{telegram_id}:{spatial}"
+            callback_data=f"product:{product_id}:{telegram_id}:{spatial}",
         )
-    )    
+    )
     return inline_keyboard
+
 
 async def get_sp_child_product_kb_in(child_product_id, telegram_id):
     EXCELLENT = "A'lo"
     MEDIUM = "Yaxshi"
     BAD = "Qoniqarsiz"
+    sale = await get_sale_by_product_id(child_product_id)
+    if await check_review_count(sale):
+        return InlineKeyboardMarkup()
     inline_keyboard = InlineKeyboardMarkup()
     inline_keyboard.add(
-        InlineKeyboardButton(   
+        InlineKeyboardButton(
             text=EXCELLENT,
-            callback_data=f"review:{child_product_id}:{EXCELLENT}:{telegram_id}"
+            callback_data=f"review:{child_product_id}:{EXCELLENT}:{telegram_id}",
         ),
         InlineKeyboardButton(
             text=MEDIUM,
-            callback_data=f"review:{child_product_id}:{MEDIUM}:{telegram_id}"
+            callback_data=f"review:{child_product_id}:{MEDIUM}:{telegram_id}",
         ),
         InlineKeyboardButton(
-            text=BAD,
-            callback_data=f"review:{child_product_id}:{BAD}:{telegram_id}"
-        )
+            text=BAD, callback_data=f"review:{child_product_id}:{BAD}:{telegram_id}"
+        ),
     )
     return inline_keyboard
-    
+
 
 async def get_child_product_kb_in(child_product_id, telegram_id):
     EXCELLENT = "A'lo"
@@ -49,17 +60,13 @@ async def get_child_product_kb_in(child_product_id, telegram_id):
     inline_keyboard.add(
         InlineKeyboardButton(
             text=EXCELLENT,
-            callback_data=f"rate:{child_product_id}:{EXCELLENT}:{telegram_id}"
+            callback_data=f"rate:{child_product_id}:{EXCELLENT}:{telegram_id}",
         ),
         InlineKeyboardButton(
-            text=MEDIUM,
-            callback_data=f"rate:{child_product_id}:{MEDIUM}:{telegram_id}"
+            text=MEDIUM, callback_data=f"rate:{child_product_id}:{MEDIUM}:{telegram_id}"
         ),
         InlineKeyboardButton(
-            text=BAD,
-            callback_data=f"rate:{child_product_id}:{BAD}:{telegram_id}"
-        )
+            text=BAD, callback_data=f"rate:{child_product_id}:{BAD}:{telegram_id}"
+        ),
     )
     return inline_keyboard
-
-
