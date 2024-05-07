@@ -163,6 +163,6 @@ CSRF_TRUSTED_ORIGINS = ["http://localhost:8080"]
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_URL = "/login/"  # Or your custom login route
-LOGIN_REDIRECT_URL = "/"  # Or your custom URL
+LOGIN_REDIRECT_URL = "/containers"  # Or your custom URL
 REVIEW_LIMIT = 2
 REVIEW_DAYS = 7

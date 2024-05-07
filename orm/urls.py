@@ -27,25 +27,25 @@ import orm_app, website
 from django.conf.urls.i18n import i18n_patterns
 
 
-
 class MyLoginView(auth_views.LoginView):
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
 
-
 class MyLogoutView(auth_views.LogoutView):
+
 
     @csrf_exempt
     def dispatch(self, request, *args, **kwargs):
         return super().dispatch(request, *args, **kwargs)
+    
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('login/', MyLoginView.as_view(), name='login'),
     path('logout/', MyLogoutView.as_view(next_page='/login/'), name='logout'),
-    path("containers", include("orm_app.urls")),
+    path("containers/", include("orm_app.urls")),
     path("", include("website.urls")),
 ]
 

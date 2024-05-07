@@ -1,8 +1,8 @@
 from django.urls import path
-from . import views
+from .views import IndexView, ContainerDetailView
+
 
 urlpatterns = [
-    path('', views.index, name='containers_list'),
-    path('container/<int:container_id>/', views.container_detail, name='container_detail'),
-    # path('reviewer_detail/<str:reviewer_name>/', views.reviewer_detail, name='reviewer_detail'),
+    path('', IndexView.as_view(), name='containers_list'),
+    path('detail/<int:pk>/', ContainerDetailView.as_view(), name='container-detail'),
 ]

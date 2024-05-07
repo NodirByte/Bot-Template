@@ -178,7 +178,7 @@
         containerDetails.forEach((container) => {
           container.addEventListener("click", function () {
             const containerId = this.dataset.containerId;
-            window.location.href = `/container/${containerId}/`;
+            window.location.href = `/containers/detail/${containerId}/`;
           });
         });
       });
