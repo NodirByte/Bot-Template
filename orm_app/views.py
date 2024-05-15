@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Container, User
 from django.core.paginator import Paginator
-from .services import get_review_statistics_by_container
+from .services import get_review_statistics_by_container, get_reviewers_statistics_by_user
 from django.contrib.auth.mixins import AccessMixin
 from django.views.generic import ListView, DetailView
 
@@ -42,4 +42,35 @@ class ContainerDetailView(SuperuserRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context['review_statistics'] = get_review_statistics_by_container(self.kwargs['pk'])
         return context
+    
+class ReviewersView(SuperuserRequiredMixin, ListView):
+    model = User
+    template_name = 'reviewers.html'
+    context_object_name = 'reviewers'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return User.objects.filter().order_by('id')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reviewers'] = User.objects.all()
+        return context
+
+class ReviewerDetailView(SuperuserRequiredMixin, DetailView):
+    model = User
+    template_name = 'reviewer_detail.html'
+    context_object_name = 'reviewer'
+
+    def get_queryset(self):
+        return User.objects.filter(id=self.kwargs['pk'])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['reviewer_statistics'] = get_reviewers_statistics_by_user(self.kwargs['pk'])
+        return context
+    
+        
+    
+    
     

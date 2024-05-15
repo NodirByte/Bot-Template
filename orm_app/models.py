@@ -110,15 +110,3 @@ class Review(models.Model):
     def __str__(self):
         return self.rating + " - " + self.product.name + " - " + self.user.name
 
-
-# class SaleReview(models.Model):
-#     sale = models.ForeignKey("Sale", on_delete=models.SET_NULL, null=True, blank=True)
-#     review = models.ForeignKey(
-#         "Review", on_delete=models.SET_NULL, null=True, blank=True
-#     )
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now=True)
-#     is_active = models.BooleanField(default=True)
-
-#     def __str__(self):
-#         return self.sale.product.name + " " + self.review.rating
