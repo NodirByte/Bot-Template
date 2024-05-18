@@ -83,9 +83,7 @@ class Sale(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return (
-            self.product.name + " - " + str(self.purchase_date) + " - " + self.user.name
-        )
+        return self.purchase_date
 
 
 class Review(models.Model):
@@ -108,5 +106,5 @@ class Review(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return self.rating + " - " + self.product.name + " - " + self.user.name
+        return self.product.name
 
