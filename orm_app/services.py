@@ -1,5 +1,7 @@
 from collections import defaultdict
+
 from django.db.models import Count, OuterRef, Subquery
+
 from .models import Container, Product, Review, Sale, User
 
 
@@ -44,48 +46,46 @@ def get_review_statistics_by_container(container_id) -> dict:
     return review_statistics
 
 
-
 def get_reviewers_statistics_by_user(reviewer_pk) -> dict:
     # Get the user's reviews along with product and rating information
-    reviews_info = Review.objects.filter(user_id=reviewer_pk).select_related('product')
+    reviews_info = Review.objects.filter(user_id=reviewer_pk).select_related("product")
 
     # Initialize statistics dictionary
     statistics = {
-        'total_reviews': 0,
-        'excellent_reviews': 0,
-        'medium_reviews': 0,
-        'bad_reviews': 0,
-        'product_ratings': {}  # Dictionary to store product ratings by the user
+        "total_reviews": 0,
+        "excellent_reviews": 0,
+        "medium_reviews": 0,
+        "bad_reviews": 0,
+        "product_ratings": {},  # Dictionary to store product ratings by the user
     }
 
     # Populate product ratings for each review
     for review in reviews_info:
         product_name = review.product.name if review.product else "Unknown Product"
         rating = review.rating
-        statistics['total_reviews'] += 1
+        statistics["total_reviews"] += 1
 
         # Update rating count
         if rating == Review.EXCELLENT:
-            statistics['excellent_reviews'] += 1
+            statistics["excellent_reviews"] += 1
         elif rating == Review.MEDIUM:
-            statistics['medium_reviews'] += 1
+            statistics["medium_reviews"] += 1
         elif rating == Review.BAD:
-            statistics['bad_reviews'] += 1
+            statistics["bad_reviews"] += 1
 
         # Update product ratings dictionary
-        if product_name not in statistics['product_ratings']:
-            statistics['product_ratings'][product_name] = {
-                'excellent': 0,
-                'medium': 0,
-                'bad': 0
+        if product_name not in statistics["product_ratings"]:
+            statistics["product_ratings"][product_name] = {
+                "excellent": 0,
+                "medium": 0,
+                "bad": 0,
             }
-        statistics['product_ratings'][product_name][rating.lower()] += 1
+        statistics["product_ratings"][product_name][rating.lower()] += 1
 
     return statistics
+
 
 def get_products_statistics_by_date(from_date, to_date) -> dict:
     # Get the products that arrived on the specified date
     containers = Container.objects.filter(arrival_date__range=[from_date, to_date])
     review_statistics = {}
-    
-    

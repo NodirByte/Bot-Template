@@ -10,12 +10,19 @@ class User(models.Model):
     organization = models.ForeignKey(
         "Organization", on_delete=models.SET_NULL, null=True, blank=True
     )
+    organizations = models.ManyToManyField("Organization", related_name="users")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.name
+
+    @property
+    def get_organizations(self):
+        return ", ".join(
+            [str(organization) for organization in self.organizations.all()]
+        )
 
 
 class Organization(models.Model):
@@ -106,5 +113,8 @@ class Review(models.Model):
     is_active = models.BooleanField(default=True)
 
     def __str__(self):
-        return str(self.product.name) + " " + str(self.rating) + " " + str(self.user.name) if self.product and self.rating and self.user else "No Review Name"
-
+        return (
+            str(self.product.name) + " " + str(self.rating) + " " + str(self.user.name)
+            if self.product and self.rating and self.user
+            else "No Review Name"
+        )
