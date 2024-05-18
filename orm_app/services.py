@@ -3,7 +3,7 @@ from django.db.models import Count, OuterRef, Subquery
 from .models import Container, Product, Review, Sale, User
 
 
-def get_review_statistics_by_container(container_id):
+def get_review_statistics_by_container(container_id) -> dict:
     review_statistics = {}
 
     # Retrieve all products in the specified container
@@ -45,7 +45,7 @@ def get_review_statistics_by_container(container_id):
 
 
 
-def get_reviewers_statistics_by_user(reviewer_pk):
+def get_reviewers_statistics_by_user(reviewer_pk) -> dict:
     # Get the user's reviews along with product and rating information
     reviews_info = Review.objects.filter(user_id=reviewer_pk).select_related('product')
 
@@ -82,3 +82,10 @@ def get_reviewers_statistics_by_user(reviewer_pk):
         statistics['product_ratings'][product_name][rating.lower()] += 1
 
     return statistics
+
+def get_products_statistics_by_date(from_date, to_date) -> dict:
+    # Get the products that arrived on the specified date
+    containers = Container.objects.filter(arrival_date__range=[from_date, to_date])
+    review_statistics = {}
+    
+    

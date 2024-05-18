@@ -2,17 +2,15 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Container List</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-    <!-- Import the style css -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
     <link rel="stylesheet" href="{% static 'css/containers.css' %}" />
 
 </head>
-
 <body>
     <div class="navbar">
         <a href="{% url 'home' %}" class="navbar-brand"><i class="fas fa-cube"></i> Xandecor</a>
@@ -22,6 +20,14 @@
             <a href="{% url 'reviewers' %}" class="navbar-button"><i class="fas fa-users"></i> Users</a>
         </div>
     </div>
+
+    <!-- Date Range Picker -->
+    <div class="date-picker">
+        <label for="date-range">Select Date Range: </label>
+        <input type="text" id="date-range" />
+        <button id="filter-button">Filter</button>
+    </div>
+
     <table id="container-table">
         <thead>
             <tr>
@@ -72,18 +78,22 @@
             {% endif %}
         </span>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const containerDetails =
-                document.querySelectorAll(".container-details");
-            containerDetails.forEach((container) => {
-                container.addEventListener("click", function () {
-                    const containerId = this.dataset.containerId;
-                    window.location.href = `/containers/c-detail/${containerId}/`;
-                });
+            flatpickr("#date-range", {
+                mode: "range",
+                dateFormat: "Y-m-d",
+            });
+
+            document.getElementById("filter-button").addEventListener("click", function () {
+                const dateRange = document.getElementById("date-range").value;
+                if (dateRange) {
+                    window.location.href = `/containers/?date_range=${dateRange}`;
+                }
             });
         });
     </script>
 </body>
-
 </html>
