@@ -1,7 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,51 +8,61 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/containers.css' %}">
 </head>
-
 <body>
     <div class="navbar">
         <a href="{% url 'home' %}" class="navbar-brand"><i class="fas fa-cube"></i> Xandecor</a>
-        <div>
+        <div class="navbar-menu">
             <span class="navbar-text"><i class="fas fa-boxes"></i> Container Detail</span>
             <a href="{% url 'containers_list' %}" class="navbar-button"><i class="fas fa-box-open"></i> Containers</a>
             <a href="{% url 'reviewers' %}" class="navbar-button"><i class="fas fa-users"></i> Users</a>
         </div>
     </div>
-    <div class="container">
+    <div class="container-detail">
         <h1>{{ container.number }} Container</h1>
         <div class="product">
             {% for product, stats in review_statistics.items %}
             <div class="product-name"><i class="fas fa-box-open"></i> {{ product }}</div>
-            <div class="review-stats">
+            <div class="review-section">
                 <div class="review-stat">
                     <h3><i class="fas fa-chart-line"></i> Review Statistics</h3>
-                    <ul>
-                        {% for rating, count in stats.reviews.items %}
-                        <li class="rating-{{ rating|lower }}">{{ rating }}: {{ count }}</li>
-                        {% endfor %}
-                    </ul>
+                    <div class="table-responsive">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rating</th>
+                                    <th>Count</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for rating, count in stats.reviews.items %}
+                                <tr>
+                                    <td class="rating-{{ rating|lower }}">{{ rating }}</td>
+                                    <td>{{ count }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="review-stat">
-                    <h3><i class="fas fa-users"></i> Baho beruvchilar</h3>
-                    <ul class="reviewer-list">
+                <div class="reviewer-info">
+                    <h3><i class="fas fa-users"></i> Reviewers</h3>
+                    <ul>
                         {% for reviewer, ratings in stats.reviewers.items %}
-                        <li class="reviewer-name">
-                            {{ reviewer }}
+                        <li>
+                            <span class="reviewer-name">{{ reviewer }}</span>
+                            <ul class="rating-list">
+                                {% for rating in ratings %}
+                                <li class="rating-{{ rating|lower }}">{{ rating }}</li>
+                                {% endfor %}
+                            </ul>
                         </li>
-                        <ul class="rating-list">
-                            {% for rating in ratings %}
-                            <li class="rating-{{ rating|lower }}">{{ rating }}</li>
-                            {% endfor %}
-                        </ul>
-                        <hr color="#ddd">
                         {% endfor %}
                     </ul>
                 </div>
             </div>
-            <hr color="#ddd">
+            <hr>
             {% endfor %}
         </div>
     </div>
 </body>
-
 </html>

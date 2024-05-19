@@ -39,25 +39,35 @@ async def categories(message: types.Message):
 
     for product in products:
         products_kb_in = await get_products_kb_in(product.id, telegram_id)
-        file_path = product.image.path
+        file_path1 = product.image1.path
+        file_path2 = product.image2.path
         caption = f"{category_text}\n{product.name}\n{product.number}"
         try:
-            with open(file_path, "rb") as file:
-                await message.bot.send_document(
-                    telegram_id, file, caption=caption, reply_markup=products_kb_in
+            with open(file_path1, "rb") as file1, open(file_path2, "rb") as file2:
+                # Send the first image with caption
+                media = [
+                        types.InputMediaPhoto(file1, caption=caption),
+                        types.InputMediaPhoto(file2)
+                    ]
+                await bot.send_media_group(
+                    chat_id=telegram_id,
+                    media=media
+                )
+                await bot.send_message(
+                    text='Boshqa mahsulotlarni ko\'rish uchun quyidagi tugmani bosing:',
+                    chat_id=telegram_id,
+                    reply_markup=products_kb_in
                 )
         except Exception as e:
             print(e)
-            await message.answer(caption)
+            await bot.send_message(telegram_id, caption)
 
 
 @dp.callback_query_handler(lambda query: query.data.startswith("product"), state=None)
 async def product(query: CallbackQuery, state: FSMContext):
     try:
         _, product_id, telegram_id, container_id = query.data.split(":")
-        print("\nData: ", query.data)
         child_products = await get_products_child(product_id)
-        print("\nChild Products: ", child_products)
         for child_product in child_products:
             if container_id != "None":
                 child_product_kb_in = await get_sp_child_product_kb_in(
@@ -68,15 +78,25 @@ async def product(query: CallbackQuery, state: FSMContext):
                 child_product_kb_in = await get_child_product_kb_in(
                     child_product.id, telegram_id
                 )
-            file_path = child_product.image.path
+            file_path1 = child_product.image1.path
+            file_path2 = child_product.image2.path
             caption = f"{child_product.name}\n{child_product.number}"
-            with open(file_path, "rb") as file:
-                await query.bot.send_document(
-                    telegram_id, file, caption=caption, reply_markup=child_product_kb_in
+            with open(file_path1, "rb") as file1, open(file_path2, "rb") as file2:
+                media = [
+                    types.InputMediaPhoto(file1, caption=caption),
+                    types.InputMediaPhoto(file2)
+                ]
+                await bot.send_media_group(
+                    chat_id=telegram_id,
+                    media=media
+                )
+                await bot.send_message(
+                    text='Mahsulotni baholash uchun quyidagi tugmalardan birini tanlang:',
+                    chat_id=telegram_id,
+                    reply_markup=child_product_kb_in
                 )
     except Exception as e:
-
-        print("Error in types of Product: ", e)
+        print("IN the Child product includes the error is: ", e)
         await query.answer("Error")
 
 

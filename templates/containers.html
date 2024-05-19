@@ -9,12 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css" />
     <link rel="stylesheet" href="{% static 'css/containers.css' %}" />
-
 </head>
 <body>
     <div class="navbar">
         <a href="{% url 'home' %}" class="navbar-brand"><i class="fas fa-cube"></i> Xandecor</a>
-        <div>
+        <div class="navbar-menu">
             <span class="navbar-text"><i class="fas fa-boxes"></i> Containers List</span>
             <a href="{% url 'containers_list' %}" class="navbar-button"><i class="fas fa-box-open"></i> Containers</a>
             <a href="{% url 'reviewers' %}" class="navbar-button"><i class="fas fa-users"></i> Users</a>
@@ -31,7 +30,8 @@
     <table id="container-table">
         <thead>
             <tr>
-                <th><i class="fas fa-barcode"></i> Number</th>
+                <th>#</th>
+                <th><i class="fas fa-box"></i> Containers</th>
                 <th><i class="far fa-calendar-alt"></i> Arrival Date</th>
                 <th><i class="fas fa-info-circle"></i> Details</th>
             </tr>
@@ -39,6 +39,7 @@
         <tbody>
             {% for container in containers %}
             <tr style="animation: fadeIn 0.5s ease forwards; animation-delay: {{ forloop.counter }}s;">
+                <td>{{ forloop.counter }}</td>
                 <td>
                     <div class="container-details" data-container-id="{{ container.id }}">
                         <i class="fas fa-truck icon"></i>
@@ -86,11 +87,12 @@
                 mode: "range",
                 dateFormat: "Y-m-d",
             });
-
+    
             document.getElementById("filter-button").addEventListener("click", function () {
                 const dateRange = document.getElementById("date-range").value;
                 if (dateRange) {
-                    window.location.href = `/containers/?date_range=${dateRange}`;
+                    const [fromDate, toDate] = dateRange.split(" to ");
+                    window.location.href = `/containers/pdts-st/${fromDate}_${toDate}`;
                 }
             });
         });

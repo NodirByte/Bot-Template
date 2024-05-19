@@ -24,13 +24,6 @@ h1 {
   margin-bottom: 30px;
 }
 
-.product-name {
-  font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  color: #007bff;
-}
-
 .review-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -295,3 +288,110 @@ tr:hover {
 .fas.fa-thumbs-up { color: green; }
 .fas.fa-thumbs-down { color: red; }
 .fas.fa-minus-circle { color: orange; }
+
+/* Detail page */
+
+.container-detail {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.container-detail h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #343a40;
+}
+.product {
+  margin-bottom: 40px;
+}
+.product-name {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #343a40;
+  display: flex;
+  align-items: center;
+}
+.product-name i {
+  margin-right: 10px;
+}
+.review-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+}
+.review-stat, .reviewer-info {
+  flex: 1;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #ffffff;
+  margin-right: 10px;
+}
+.review-stat:last-child {
+  margin-right: 0;
+}
+.review-stat h3, .reviewer-info h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #007bff;
+}
+.table-responsive {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}        
+ul {
+  list-style: none;
+  padding: 0;
+}
+li {
+  margin-bottom: 10px;
+}
+.reviewer-name {
+  font-weight: bold;
+}
+.rating-list {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.rating-list li {
+  padding: 2px 8px;
+  border-radius: 3px;
+  background-color: #ddd;
+}
+hr {
+  border: 0;
+  height: 1px;
+  background-color: #ddd;
+  margin: 40px 0;
+}
+
+td.rating-excellent {
+  background-color: #28a745;
+  color: white;
+}
+td.rating-medium {
+  background-color: #ffc107;
+  color: white;
+}
+td.rating-bad {
+  background-color: #dc3545;
+  color: white;
+}

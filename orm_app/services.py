@@ -85,7 +85,9 @@ def get_reviewers_statistics_by_user(reviewer_pk) -> dict:
     return statistics
 
 
+
 def get_products_statistics_by_date(from_date, to_date) -> dict:
-    # Get the products that arrived on the specified date
+    review_statistics = {}
     containers = Container.objects.filter(arrival_date__range=[from_date, to_date])
+    review_statistics = {}
     review_statistics = {}

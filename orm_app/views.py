@@ -8,6 +8,11 @@ from .services import (
     get_review_statistics_by_container,
     get_reviewers_statistics_by_user,
 )
+from django.core.paginator import Paginator
+from .services import get_review_statistics_by_container, get_reviewers_statistics_by_user, get_products_statistics_by_date
+from django.contrib.auth.mixins import AccessMixin
+from django.views.generic import ListView, DetailView
+
 
 
 class SuperuserRequiredMixin(AccessMixin):
@@ -78,4 +83,24 @@ class ReviewerDetailView(SuperuserRequiredMixin, DetailView):
         context["reviewer_statistics"] = get_reviewers_statistics_by_user(
             self.kwargs["pk"]
         )
+        return context
+
+        context['reviewer_statistics'] = get_reviewers_statistics_by_user(self.kwargs['pk'])
+        return context
+    
+        
+
+class ProductsStatisticsView(SuperuserRequiredMixin, ListView):
+    model = User
+    template_name = 'products_statistics.html'
+    context_object_name = 'products'
+
+    def get_queryset(self):
+        return User.objects.filter().order_by('id')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        from_date = self.kwargs['from_date']
+        to_date = self.kwargs['to_date']
+        context['statistics'] = get_products_statistics_by_date(from_date, to_date)
         return context

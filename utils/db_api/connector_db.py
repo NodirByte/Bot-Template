@@ -24,11 +24,6 @@ def get_categories():
 
 
 @sync_to_async
-def get_user_organization(telegram_id):
-    return models.User.objects.get(telegram_id=telegram_id).organization
-
-
-@sync_to_async
 def rate_product(
     user: models.User, product: models.Product, rate: str, sale: models.Sale = None
 ):

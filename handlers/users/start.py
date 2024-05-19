@@ -4,8 +4,6 @@ from aiogram.dispatcher import FSMContext
 from loader import dp
 from utils.db_api.connector_db import (
     get_users,
-    get_user_organization,
-    get_categories,
 )
 from keyboards.default.users_replies import categories_kb
 from keyboards.inline.users_inlines import get_products_kb_in
