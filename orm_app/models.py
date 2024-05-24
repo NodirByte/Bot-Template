@@ -5,7 +5,7 @@ from django.db import models
 
 class User(models.Model):
     name = models.CharField(max_length=100)
-    telegram_id = models.IntegerField()
+    telegram_id = models.BigIntegerField()
     phone_number = models.CharField(max_length=100, null=False, blank=False)
     organization = models.ForeignKey(
         "Organization", on_delete=models.SET_NULL, null=True, blank=True
