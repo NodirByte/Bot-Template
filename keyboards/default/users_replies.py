@@ -12,3 +12,14 @@ async def categories_kb():
     resize_keyboard=True
     )
     return categories
+
+def get_user_phone_kb():
+    user_phone_kb = ReplyKeyboardMarkup(
+        keyboard=[
+            [
+                KeyboardButton(text="Telefon raqamni yuborish", request_contact=True)
+            ]
+        ],
+        resize_keyboard=True
+    )
+    return user_phone_kb

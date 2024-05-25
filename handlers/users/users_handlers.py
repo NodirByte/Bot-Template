@@ -7,6 +7,7 @@ from loader import dp, bot
 from aiogram import types
 
 from utils.db_api.connector_db import (
+    check_user_exist,
     get_categories,
     get_child_product_by_id,
     get_products_child,
@@ -15,6 +16,7 @@ from utils.db_api.connector_db import (
     get_user_by_telegram_id,
     rate_product,
     get_sale_by_cp_ids,
+    save_new_user,
     update_review_count,
 )
 from aiogram.types import CallbackQuery
@@ -162,3 +164,23 @@ async def rate_of_product(query: CallbackQuery, state: FSMContext):
     except Exception as e:
         print(e)
         await query.answer("Error")
+
+@dp.message_handler(content_types=types.ContentType.CONTACT)
+async def handle_contact(message: types.Message):
+    contact = message.contact
+    telegram_id = message.from_user.id
+    firt_name = contact.first_name
+    last_name = contact.last_name
+    phone_number = contact.phone_number
+    if await check_user_exist(phone_number=phone_number):
+        await message.reply(f"Kechirasiz, {firt_name}! Siz ro'yxatdan o'tgansiz! Iltimos, kuting admin sizni qo'shadi!")
+        return
+    if firt_name is None:
+        firt_name = "Mavjud emas"
+    elif last_name is None:
+        last_name = "Mavjud emas"
+    await save_new_user(telegram_id=telegram_id, phone_number=phone_number, first_name=firt_name, last_name=last_name)
+    # You can now use user_id and phone_number as needed
+    await message.reply(f"Rahmat! Sizning telefon raqamingiz: {phone_number} qabul qilindi!\nIltimos, kuting admin sizni ro'yxatdan o'tkazadi!")
+    # Save the phone number to the database
+    

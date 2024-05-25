@@ -27,9 +27,7 @@ async def get_sp_child_product_kb_in(child_product_id, telegram_id, container_id
     EXCELLENT = "A'lo"
     MEDIUM = "Yaxshi"
     BAD = "Qoniqarsiz"
-    print("Child Product ID on inline: ", child_product_id)
     sale = await get_sale_by_cp_ids(child_product_id, container_id)
-    print("Sale: ", sale)
     if await check_review_count(sale):
         return InlineKeyboardMarkup()
     inline_keyboard = InlineKeyboardMarkup()
@@ -72,3 +70,4 @@ async def get_child_product_kb_in(child_product_id, telegram_id):
         ),
     )
     return inline_keyboard
+

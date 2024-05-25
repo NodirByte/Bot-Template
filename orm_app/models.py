@@ -119,3 +119,15 @@ class Review(models.Model):
             if self.product and self.rating and self.user
             else "No Review Name"
         )
+
+
+class AskUser(models.Model):
+    first_name = models.CharField(max_length=100, null=False, blank=False, default='Mavjud emas')
+    last_name = models.CharField(max_length=100, null=False, blank=False)
+    telegram_id = models.BigIntegerField()
+    phone_number = models.CharField(max_length=100, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.first_name + " " + self.last_name

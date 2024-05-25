@@ -99,3 +99,27 @@ def get_sales():
 @sync_to_async
 def get_all_containers():
     return list(models.Container.objects.all())
+
+@sync_to_async
+def save_new_user(telegram_id, phone_number, first_name, last_name):
+    user = models.AskUser.objects.create(
+        first_name=first_name,
+        last_name=last_name,
+        telegram_id=telegram_id,
+        phone_number=phone_number,
+    )
+    user.save()
+    return user
+
+@sync_to_async
+def check_user_exist(phone_number):
+    try:
+        user = models.AskUser.objects.get(phone_number=phone_number)
+        if user:
+            return True
+        else:
+            return False
+    except ObjectDoesNotExist:
+        return None
+
+    
