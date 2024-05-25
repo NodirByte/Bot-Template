@@ -46,8 +46,7 @@
                 <td>
                     <div class="container-details" data-container-id="{{ container.id }}">
                         <i class="fas fa-truck icon"></i>
-                        <a href="{% url 'container-detail' container.id %}" class="container-number">{{ container.number
-                            }}</a>
+                        <a href="{% url 'container-detail' container.id %}" class="container-number">{{ container.number }}</a>
                     </div>
                 </td>
                 <td>
@@ -56,10 +55,8 @@
                 </td>
                 <td>
                     <div>
-                        <span class="small-text"><i class="fas fa-clock icon"></i> Created At: {{
-                            container.created_at|date:"DATETIME_FORMAT" }}</span><br>
-                        <span class="small-text"><i class="fas fa-history icon"></i> Updated At: {{
-                            container.updated_at|date:"DATETIME_FORMAT" }}</span>
+                        <span class="small-text"><i class="fas fa-clock icon"></i> Created At: {{ container.created_at|date:"DATETIME_FORMAT" }}</span><br>
+                        <span class="small-text"><i class="fas fa-history icon"></i> Updated At: {{ container.updated_at|date:"DATETIME_FORMAT" }}</span>
                     </div>
                 </td>
             </tr>

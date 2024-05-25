@@ -61,8 +61,7 @@
       <a href="?page={{ reviewers.previous_page_number }}">Previous</a>
       {% endif %}
 
-      <span class="current">Page {{ reviewers.number }} of {{ reviewers.paginator.num_pages
-        }}.</span>
+      <span class="current">Page {{ reviewers.number }} of {{ reviewers.paginator.num_pages }}.</span>
 
       {% if reviewers.has_next %}
       <a href="?page={{ reviewers.next_page_number }}">Next</a>
