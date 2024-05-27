@@ -2,7 +2,7 @@ from collections import defaultdict
 
 from django.db.models import Count, OuterRef, Subquery
 
-from .models import Container, Product, Review, Sale, User
+from .models import AskUser, Container, Product, Review, Sale, User
 
 
 def get_review_statistics_by_container(container_id) -> dict:
@@ -91,3 +91,8 @@ def get_products_statistics_by_date(from_date, to_date) -> dict:
     containers = Container.objects.filter(arrival_date__range=[from_date, to_date])
     review_statistics = {}
     review_statistics = {}
+
+def asked_users_count(request):
+    return {
+        'asked_users_count': AskUser.objects.count(),
+    }

@@ -77,6 +77,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 'website.service.get_about_us',
                 'website.service.get_carousel_main_photo',
+                'orm_app.services.asked_users_count',
             ],
         },
     },

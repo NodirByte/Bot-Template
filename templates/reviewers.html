@@ -13,15 +13,8 @@
 </head>
 
 <body>
-  <div class="navbar">
-    <a href="{% url 'home' %}" class="navbar-brand"><i class="fas fa-cube"></i> Xandecor</a>
-    <div>
-      <span class="navbar-text"><i class="fas fa-boxes"></i> Users List</span>
-      <a href="{% url 'containers_list' %}" class="navbar-button"><i class="fas fa-box-open"></i> Containers</a>
-      <a href="{% url 'reviewers' %}" class="navbar-button"><i class="fas fa-users"></i> Users</a>
-      <a href="{% url 'asked_users' %}" class="navbar-button"><i class="fas fa-users"></i> Permission</a>
-    </div>
-  </div>
+  
+  {% include '_navbar.html' %}
 
   <h1><i class="fas fa-users"></i> User Table</h1>
 

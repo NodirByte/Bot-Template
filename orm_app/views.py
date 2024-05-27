@@ -42,6 +42,7 @@ class IndexView(SuperuserRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["users"] = User.objects.all()
+        context["active_page"] = "containers_list"
         return context
 
 
@@ -58,6 +59,7 @@ class ContainerDetailView(SuperuserRequiredMixin, DetailView):
         context["review_statistics"] = get_review_statistics_by_container(
             self.kwargs["pk"]
         )
+        context["active_page"] = "containers_list"
         return context
 
 
@@ -73,6 +75,7 @@ class ReviewersView(SuperuserRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["reviewers"] = User.objects.all()
+        context["active_page"] = "reviewers"
         return context
 
 
@@ -89,6 +92,7 @@ class ReviewerDetailView(SuperuserRequiredMixin, DetailView):
         context["reviewer_statistics"] = get_reviewers_statistics_by_user(
             self.kwargs["pk"]
         )
+        context["active_page"] = "reviewers"
         return context
     
         
@@ -105,6 +109,7 @@ class ProductsStatisticsView(SuperuserRequiredMixin, ListView):
         from_date = self.kwargs["from_date"]
         to_date = self.kwargs["to_date"]
         context["statistics"] = get_products_statistics_by_date(from_date, to_date)
+        context["active_page"] = "products_statistics"
         return context
 
 
@@ -121,7 +126,9 @@ class AskedUsersView(SuperuserRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['asked_users'] = AskUser.objects.all()
         context['organizations'] = Organization.objects.all()
+        context['active_page'] = 'asked_users'
         return context
+
 
 def accept_user(request, pk):
     user = get_object_or_404(AskUser, pk=pk)
