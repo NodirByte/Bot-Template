@@ -54,8 +54,8 @@ class Product(models.Model):
     organization = models.ForeignKey(
         "Organization", on_delete=models.SET_NULL, null=True, blank=True
     )
-    image1 = models.ImageField(upload_to="images/", null=True, blank=True)
-    image2 = models.ImageField(upload_to="images/", null=True, blank=True)
+    image1 = models.ImageField(upload_to="images/")
+    image2 = models.ImageField(upload_to="images/")
     parent = models.ForeignKey("self", on_delete=models.SET_NULL, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
