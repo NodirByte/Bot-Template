@@ -163,8 +163,6 @@ def save_user_with_organizations(request):
         response = {'status': 'success'}
         url = f'https://api.telegram.org/bot{BOT_TOKEN}/sendMessage'
         payload = {'chat_id': user.telegram_id, 'text': "Sizning arizangiz qabul qilindi! Botimizdan foydalanishga ruxsat berildi!"}
-        response = requests.post(url, data=payload)
-        # remove user from askuser 
-        AskUser.objects.filter(pk=user_id).delete()
+        requests.post(url, data=payload)
         return JsonResponse(response)
     return JsonResponse({'status': 'error'}, status=400)
