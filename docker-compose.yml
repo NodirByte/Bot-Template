@@ -7,17 +7,30 @@ services:
     command: python3 app.py
     env_file: ./.env
     volumes:
-      - ./db.sqlite3:/app/db.sqlite3
+      - .:/app
+    depends_on:
+      - db
 
   admin:
     command: python3 manage.py runserver 0.0.0.0:8000
     container_name: admin
     build: .
+    volumes:
+      - .:/app
     ports:
       - "80:8000"
+    depends_on:
+      - db
+
+  db:
+    container_name: postgres_db
+    image: postgres:14
+    env_file:
+      - ./.env
+    ports:
+      - 5432:5432
     volumes:
-      - ./db.sqlite3:/app/db.sqlite3
+      - postgres_data:/var/lib/postgresql/data/
 
 volumes:
-  db_data:
-    driver: local
+  postgres_data:
