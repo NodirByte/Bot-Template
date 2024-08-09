@@ -1,4 +1,4 @@
-FROM python:3.11
+FROM python:3.10-alpine
 
 # LABEL Maintainer="#*****#"
 ENV PYTHONUNBUFFERED=1
